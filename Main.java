@@ -1,31 +1,29 @@
 public class Main {
     public static void main(String[] args) {
-        Chef chef = new Chef();
-        TakeoutPerson takeoutPerson = new TakeoutPerson();
-
+        TakeoutVisitor takeoutVisitor = new TakeoutVisitor();
         // Prepare a vegetarian pizza
         Dish pizza = new Pizza();
         DishVisitor vegetarianVisitor = new VegetarianVisitor();
-        chef.prepareDish(pizza, vegetarianVisitor);
-        takeoutPerson.packDish(pizza, new PizzaTakeoutVisitor());
+        pizza.accept(vegetarianVisitor);
+        pizza.accept(takeoutVisitor);
 
         // Prepare a vegan pasta
         Dish pasta = new Pasta();
         DishVisitor veganVisitor = new VeganVisitor();
-        chef.prepareDish(pasta, veganVisitor);
-        takeoutPerson.packDish(pasta, new PastaTakeoutVisitor());
+        pasta.accept(veganVisitor);
+        pasta.accept(takeoutVisitor);
 
         // Prepare a regular salad
         Dish salad = new Salad();
         DishVisitor regularVisitor = new RegularVisitor();
-        chef.prepareDish(salad, regularVisitor);
-        takeoutPerson.packDish(salad, new SaladTakeoutVisitor());
+        salad.accept(regularVisitor);
+        salad.accept(takeoutVisitor);
 
         // Prepare a kosher dish
         Dish kosherDish = new Pasta();
         DishVisitor kosherVisitor = new KosherVisitor();
-        chef.prepareDish(kosherDish, kosherVisitor);
-        takeoutPerson.packDish(kosherDish, new PastaTakeoutVisitor());
+        kosherDish.accept(kosherVisitor);
+        kosherDish.accept(takeoutVisitor);
     }
 }
 
@@ -138,27 +136,10 @@ class Regular extends Diet {}
 
 class Kosher extends Diet {}
 
-class PizzaTakeoutVisitor extends DishVisitor {
+class TakeoutVisitor extends DishVisitor {
     @Override
     public void visit(Pizza pizza) {
         System.out.println("Packing pizza in a box...");
-    }
-
-    @Override
-    public void visit(Pasta pasta) {
-        // do nothing
-    }
-
-    @Override
-    public void visit(Salad salad) {
-        // do nothing
-    }
-}
-
-class PastaTakeoutVisitor extends DishVisitor {
-    @Override
-    public void visit(Pizza pizza) {
-        // do nothing
     }
 
     @Override
@@ -168,35 +149,6 @@ class PastaTakeoutVisitor extends DishVisitor {
 
     @Override
     public void visit(Salad salad) {
-        // do nothing
-    }
-}
-
-class SaladTakeoutVisitor extends DishVisitor {
-    @Override
-    public void visit(Pizza pizza) {
-        // do nothing
-    }
-
-    @Override
-    public void visit(Pasta pasta) {
-        // do nothing
-    }
-
-    @Override
-    public void visit(Salad salad) {
         System.out.println("Wrapping salad in a bag...");
-    }
-}
-
-class TakeoutPerson {
-    public void packDish(Dish dish, DishVisitor takeoutVisitor) {
-        dish.accept(takeoutVisitor);
-    }
-}
-
-class Chef {
-    public void prepareDish(Dish dish, DishVisitor dietVisitor) {
-        dish.accept(dietVisitor);
     }
 }
