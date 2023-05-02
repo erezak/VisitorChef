@@ -16,6 +16,11 @@ public class Main {
         Dish salad = new Salad();
         DietVisitor regularVisitor = new RegularVisitor();
         chef.prepareDish(salad, regularVisitor);
+
+        // Prepare a kosher dish
+        Dish kosherDish = new Pasta();
+        DietVisitor kosherVisitor = new KosherVisitor();
+        chef.prepareDish(kosherDish, kosherVisitor);
     }
 }
 
@@ -101,6 +106,23 @@ class RegularVisitor extends DietVisitor {
     }
 }
 
+class KosherVisitor extends DietVisitor {
+    @Override
+    public void visit(Pizza pizza) {
+        System.out.println("Cooking kosher pizza...");
+    }
+
+    @Override
+    public void visit(Pasta pasta) {
+        System.out.println("Cooking kosher pasta...");
+    }
+
+    @Override
+    public void visit(Salad salad) {
+        System.out.println("Making kosher salad...");
+    }
+}
+
 abstract class Diet {}
 
 class Vegetarian extends Diet {}
@@ -108,6 +130,8 @@ class Vegetarian extends Diet {}
 class Vegan extends Diet {}
 
 class Regular extends Diet {}
+
+class Kosher extends Diet {}
 
 class Chef {
     public void prepareDish(Dish dish, DietVisitor dietVisitor) {
