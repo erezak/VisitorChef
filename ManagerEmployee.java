@@ -1,30 +1,62 @@
 class Employee {
-    public void assignTask(DesignTask task) {
-        System.out.println("Design task assigned to employee.");
+    public void assignTask(Task task) {
+        task.accept(new EmployeeTaskVisitor());
     }
 
-    public void assignTask(CodingTask task) {
-        System.out.println("Coding task assigned to employee.");
+    private class EmployeeTaskVisitor implements TaskVisitor {
+        @Override
+        public void visit(DesignTask task) {
+            System.out.println("Design task assigned to employee.");
+        }
+
+        @Override
+        public void visit(CodingTask task) {
+            System.out.println("Coding task assigned to employee.");
+        }
     }
 }
 
 class Engineer extends Employee {
     @Override
-    public void assignTask(DesignTask task) {
-        System.out.println("Design task assigned to engineer.");
+    public void assignTask(Task task) {
+        task.accept(new EngineerTaskVisitor());
     }
 
-    @Override
-    public void assignTask(CodingTask task) {
-        System.out.println("Coding task assigned to engineer.");
+    private class EngineerTaskVisitor implements TaskVisitor {
+        @Override
+        public void visit(DesignTask task) {
+            System.out.println("Design task assigned to engineer.");
+        }
+
+        @Override
+        public void visit(CodingTask task) {
+            System.out.println("Coding task assigned to engineer.");
+        }
     }
 }
 
-abstract class Task {}
+abstract class Task {
+    public abstract void accept(TaskVisitor visitor);
+}
 
-class DesignTask extends Task {}
+class DesignTask extends Task {
+    @Override
+    public void accept(TaskVisitor visitor) {
+        visitor.visit(this);
+    }
+}
 
-class CodingTask extends Task {}
+class CodingTask extends Task {
+    @Override
+    public void accept(TaskVisitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+interface TaskVisitor {
+    void visit(DesignTask task);
+    void visit(CodingTask task);
+}
 
 public class ManagerEmployee {
     public static void main(String[] args) {
